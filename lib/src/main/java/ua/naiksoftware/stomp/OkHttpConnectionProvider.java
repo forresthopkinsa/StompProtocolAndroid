@@ -93,6 +93,14 @@ class OkHttpConnectionProvider extends AbstractConnectionProvider {
         mConnectionStream.onNext(true);
     }
 
+    void emitLifecycleEvent(@NonNull LifecycleEvent lifecycleEvent) {
+        super.emitLifecycleEvent(lifecycleEvent);
+
+        if (lifecycleEvent.getType().equals(LifecycleEvent.Type.ERROR)) {
+            mConnectionStream.onNext(false);
+        }
+    }
+
     @Override
     void rawSend(String stompMessage) {
         openedSocked.send(stompMessage);
